@@ -16,7 +16,15 @@ import type { TaskArguments } from "hardhat/types";
  */
 
 function getStateName(state: BigInt) {
-  return state === 0n ? "WaitingForPlayers" : state === 1n ? "PlayerOnePlayed" : "PlayerTwoPlayed";
+  return state === 0n
+    ? "WaitingForPlayers"
+    : state === 1n
+      ? "PlayerOnePlayed"
+      : state === 2n
+        ? "PlayerTwoPlayed"
+        : state === 3n
+          ? "WaitingForWinner"
+          : "Resolved";
 }
 
 /**
@@ -82,7 +90,7 @@ task("task:play", "Plays in a game")
     await fhevm.initializeCLIApi();
     const encryptedGesture = await fhevm.createEncryptedInput(address, signer.address).add8(gesture).encrypt();
 
-    // Execute transaction
+    // Play in the game
     const tx = await fheRockPaperScissorsContract
       .connect(signer)
       .play(encryptedGesture.handles[0], encryptedGesture.inputProof);
@@ -100,4 +108,41 @@ task("task:play", "Plays in a game")
     console.log(
       `[${getStateName(gameAfterPlay[0])}] Game played by ${logs.args[0]} with gesture ${logs.args[1]} succeeded!`,
     );
+  });
+
+/**
+ * Example:
+ *   - npx hardhat --network sepolia task:compute-winner --address 0x...
+ */
+task("task:compute-winner", "Computes the winner of a game")
+  .addParam("address", "The FHERockPaperScissors contract address")
+  .setAction(async function (taskArguments: TaskArguments, hre) {
+    const { ethers, fhevm } = hre;
+
+    await fhevm.initializeCLIApi();
+
+    // Parse arguments
+    const address = taskArguments.address;
+    if (!isAddress(address)) {
+      throw new Error(`Argument --address is not an address`);
+    }
+
+    // Get game contract instance
+    const fheRockPaperScissorsContract = await ethers.getContractAt("FHERockPaperScissors", address);
+
+    // Compute the winner of the game
+    const signers = await ethers.getSigners();
+    const tx = await fheRockPaperScissorsContract.connect(signers[0]).computeWinner();
+    console.log(`Wait for tx:${tx.hash}...`);
+    const receipt = await tx.wait();
+    console.log(`tx:${tx.hash} status=${receipt?.status}`);
+
+    const gameAfterWinnerRequest = await fheRockPaperScissorsContract.getGame();
+
+    // Parse event logs
+    const logs = receipt?.logs.find((log) => log.fragment?.name === "WaitingForWinner");
+    if (!logs) {
+      throw new Error("WaitingForWinner event not found");
+    }
+    console.log(`[${getStateName(gameAfterWinnerRequest[0])}] Compute winner requested successfully`);
   });
