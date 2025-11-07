@@ -1,16 +1,16 @@
 {
-  "name": "fhevm-hardhat-template",
-  "description": "Hardhat-based template for developing FHEVM Solidity smart contracts",
+  "name": "fhevm-rock-paper-scissors",
+  "description": "FHEVM Rock Paper Scissors",
   "version": "0.1.0",
   "engines": {
     "node": ">=20",
     "npm": ">=7.0.0"
   },
   "license": "BSD-3-Clause-Clear",
-  "homepage": "https://github.com/zama-ai/fhevm-hardhat-template/README.md",
+  "homepage": "https://github.com/germartinez/fhevm-rock-paper-scissors/README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zama-ai/fhevm-hardhat-template.git"
+    "url": "git+https://github.com/germartinez/fhevm-rock-paper-scissors.git"
   },
   "keywords": [
     "fhevm",
