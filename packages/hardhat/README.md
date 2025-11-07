@@ -1,7 +1,7 @@
-# FHEVM Hardhat Template
+# FHEVM Rock-Paper-Scissors
 
-A Hardhat-based template for developing Fully Homomorphic Encryption (FHE) enabled Solidity smart contracts using the
-FHEVM protocol by Zama.
+A Hardhat-based Rock-Paper-Scissors game with Fully Homomorphic Encryption (FHE) enabled Solidity smart contracts using
+the FHEVM protocol by Zama.
 
 ## Quick Start
 
@@ -69,12 +69,14 @@ For detailed instructions see:
 
 ```
 fhevm-hardhat-template/
-├── contracts/           # Smart contract source files
-├── deploy/              # Deployment scripts
-├── tasks/               # Hardhat custom tasks
-├── test/                # Test files
-├── hardhat.config.ts    # Hardhat configuration
-└── package.json         # Dependencies and scripts
+├── contracts/                            # Smart contract source files
+│   │── FHERockPaperScissorsFactory.sol   # FHE Rock-paper-scissors factory contract
+│   └── FHERockPaperScissors.sol          # FHE Rock-paper-scissors contract
+├── deploy/                               # Deployment scripts
+├── tasks/                                # Hardhat custom tasks
+├── test/                                 # Test files
+├── hardhat.config.ts                     # Hardhat configuration
+└── package.json                          # Dependencies and scripts
 ```
 
 ## 📜 Available Scripts
@@ -98,12 +100,6 @@ fhevm-hardhat-template/
 
 This project is licensed under the BSD-3-Clause-Clear License. See the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
-
-- **GitHub Issues**: [Report bugs or request features](https://github.com/zama-ai/fhevm/issues)
-- **Documentation**: [FHEVM Docs](https://docs.zama.ai)
-- **Community**: [Zama Discord](https://discord.gg/zama)
-
 ---
 
-**Built with ❤️ by the Zama team**
+**Built with ❤️ by Germán, based on work by the Zama team**

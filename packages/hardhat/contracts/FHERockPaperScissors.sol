@@ -63,7 +63,7 @@ contract FHERockPaperScissors is SepoliaConfig {
         require(state != State.WaitingForWinner, "Already waiting for winner");
         require(state == State.PlayerTwoPlayed, "Game not finished yet");
 
-        // outcome = (3 + game.gesture1 - game.gesture2) % 3
+        // outcome = (3 + gesture1 - gesture2) % 3
         // outcome == 0 => draw
         // outcome == 1 => player1 wins
         // outcome == 2 => player2 wins
