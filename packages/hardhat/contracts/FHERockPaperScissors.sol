@@ -59,6 +59,27 @@ contract FHERockPaperScissors is SepoliaConfig {
     /// @param winnerAddress Address of the winner (zero address if draw)
     event Resolved(address indexed winnerAddress);
 
+    /// @notice Error thrown when a player tries to play against themselves
+    error CannotPlayAgainstYourself();
+
+    /// @notice Error thrown when the game is not finished yet
+    error GameNotFinished();
+
+    /// @notice Error thrown when the game is already finished
+    error GameAlreadyFinished();
+
+    /// @notice Error thrown when the game is not finished yet
+    error AlreadyWaitingForWinner();
+
+    /// @notice Error thrown when the winner is already computed
+    error WinnerAlreadyComputed();
+
+    /// @notice Error thrown when no winner computation is requested
+    error NoWinnerComputationRequested();
+
+    /// @notice Error thrown when the request ID is invalid
+    error InvalidRequestId();
+
     /// @notice Initializes a new Rock Paper Scissors game in the waiting state
     constructor() {
         state = State.WaitingForPlayers;
@@ -66,7 +87,12 @@ contract FHERockPaperScissors is SepoliaConfig {
     }
 
     /// @notice Returns the complete game state
-    /// @return Current game state, player1, player2, gestures, and winner
+    /// @return state Current state
+    /// @return player1 Address of the first player
+    /// @return player2 Address of the second player
+    /// @return gesture1 Encrypted gesture of the first player
+    /// @return gesture2 Encrypted gesture of the second player
+    /// @return winnerAddress Address of the winner (zero address if draw)
     function getGame() public view returns (State, address, address, euint8, euint8, address) {
         return (state, player1, player2, gesture1, gesture2, winnerAddress);
     }
@@ -85,14 +111,14 @@ contract FHERockPaperScissors is SepoliaConfig {
             state = State.PlayerOnePlayed;
             emit PlayerOnePlayed(msg.sender, gesture);
         } else if (player2 == address(0)) {
-            require(msg.sender != player1, "Cannot play against yourself");
+            if (msg.sender == player1) revert CannotPlayAgainstYourself();
             player2 = msg.sender;
             gesture2 = gesture;
             FHE.allowThis(gesture2);
             state = State.PlayerTwoPlayed;
             emit PlayerTwoPlayed(msg.sender, gesture);
         } else {
-            require(false, "Game already finished");
+            revert GameAlreadyFinished();
         }
     }
 
@@ -103,9 +129,9 @@ contract FHERockPaperScissors is SepoliaConfig {
     /// - 1 => The first player wins
     /// - 2 => The second player wins
     function computeWinner() public {
-        require(state != State.Resolved, "Winner already computed");
-        require(state != State.WaitingForWinner, "Already waiting for winner");
-        require(state == State.PlayerTwoPlayed, "Game not finished yet");
+        if (state == State.Resolved) revert WinnerAlreadyComputed();
+        if (state == State.WaitingForWinner) revert AlreadyWaitingForWinner();
+        if (state != State.PlayerTwoPlayed) revert GameNotFinished();
 
         euint8 encryptedOutcome = FHE.rem(FHE.add(FHE.asEuint8(3), FHE.sub(gesture1, gesture2)), 3);
 
@@ -123,8 +149,8 @@ contract FHERockPaperScissors is SepoliaConfig {
     /// @param cleartexts Decrypted plaintext result
     /// @param decryptionProof Proof of correct decryption
     function resolveGameCallback(uint256 requestId, bytes memory cleartexts, bytes memory decryptionProof) public {
-        require(state == State.WaitingForWinner, "No winner computation requested");
-        require(requestId == _decryptionRequestId, "Invalid requestId");
+        if (state != State.WaitingForWinner) revert NoWinnerComputationRequested();
+        if (requestId != _decryptionRequestId) revert InvalidRequestId();
 
         FHE.checkSignatures(requestId, cleartexts, decryptionProof);
         uint8 decryptedOutcome = abi.decode(cleartexts, (uint8));
