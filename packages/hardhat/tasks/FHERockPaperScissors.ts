@@ -94,9 +94,9 @@ task("task:play", "Plays in a game")
     const tx = await fheRockPaperScissorsContract
       .connect(signer)
       .play(encryptedGesture.handles[0], encryptedGesture.inputProof);
-    console.log(`Wait for tx:${tx.hash}...`);
+    console.log(`Wait for tx...`);
     const receipt = await tx.wait();
-    console.log(`tx:${tx.hash} status=${receipt?.status}`);
+    console.log(`txHash=${tx.hash} status=${receipt?.status}`);
 
     const gameAfterPlay = await fheRockPaperScissorsContract.getGame();
 
@@ -133,9 +133,9 @@ task("task:compute-winner", "Computes the winner of a game")
     // Compute the winner of the game
     const signers = await ethers.getSigners();
     const tx = await fheRockPaperScissorsContract.connect(signers[0]).computeWinner();
-    console.log(`Wait for tx:${tx.hash}...`);
+    console.log(`Wait for tx...`);
     const receipt = await tx.wait();
-    console.log(`tx:${tx.hash} status=${receipt?.status}`);
+    console.log(`txHash=${tx.hash} status=${receipt?.status}`);
 
     const gameAfterWinnerRequest = await fheRockPaperScissorsContract.getGame();
 

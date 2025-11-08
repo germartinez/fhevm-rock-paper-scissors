@@ -57,9 +57,9 @@ task("task:create-game", "Creates a new game")
     // Create a new game
     const signers = await ethers.getSigners();
     const tx = await fheRockPaperScissorsFactoryContract.connect(signers[0]).deployGame();
-    console.log(`Wait for tx:${tx.hash}...`);
+    console.log(`Wait for tx...`);
     const receipt = await tx.wait();
-    console.log(`tx:${tx.hash} status=${receipt?.status}`);
+    console.log(`txHash=${tx.hash} status=${receipt?.status}`);
 
     // Parse event logs
     const logs = receipt?.logs.find((log) => log.fragment?.name === "GameCreated");
