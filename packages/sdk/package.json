@@ -1,0 +1,38 @@
+{
+  "name": "fhevm-rock-paper-scissors",
+  "description": "FHEVM Rock Paper Scissors SDK",
+  "version": "0.1.0",
+  "private": true,
+  "types": "dist/src/index.d.ts",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "exports": {
+    "types": "./dist/src/index.d.ts",
+    "require": "./dist/cjs/index.cjs",
+    "import": "./dist/esm/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/germartinez/fhevm-rock-paper-scissors/blob/main/packages/sdk/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/germartinez/fhevm-rock-paper-scissors.git"
+  },
+  "scripts": {
+    "clean": "rimraf ./src/types ./dist",
+    "prettier:check": "prettier --check \"**/*.{js,json,md,ts}\"",
+    "prettier:write": "prettier --write \"**/*.{js,json,md,ts}\"",
+    "build": "pnpm build:esm && pnpm build:cjs && pnpm build:types",
+    "build:esm": "esbuild ./src/index --format=esm --bundle --packages=external --outdir=dist/esm --out-extension:.js=.mjs",
+    "build:cjs": "esbuild ./src/index --format=cjs --bundle --packages=external --outdir=dist/cjs --out-extension:.js=.cjs",
+    "build:types": "tsc -p tsconfig.json",
+    "test": "vitest run --coverage",
+    "lint": "pnpm lint:ts && pnpm prettier:check",
+    "lint:ts": "eslint --ignore-path ./.eslintignore --ext .js,.ts ."
+  },
+  "dependencies": {
+    "@zama-fhe/relayer-sdk": "^0.2.0",
+    "ethers": "^6.15.0"
+  }
+}
