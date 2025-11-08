@@ -20,16 +20,16 @@
     "url": "git+https://github.com/germartinez/fhevm-rock-paper-scissors.git"
   },
   "scripts": {
-    "clean": "rimraf ./src/types ./dist",
-    "prettier:check": "prettier --check \"**/*.{js,json,md,ts}\"",
-    "prettier:write": "prettier --write \"**/*.{js,json,md,ts}\"",
+    "clean": "rimraf ./src/types ./dist ./coverage",
+    "prettier:check": "prettier --check \"**/*.{js,json,md,ts}\" --ignore-path ../../.prettierignore",
+    "prettier:write": "prettier --write \"**/*.{js,json,md,ts}\" --ignore-path ../../.prettierignore",
     "build": "pnpm build:esm && pnpm build:cjs && pnpm build:types",
     "build:esm": "esbuild ./src/index --format=esm --bundle --packages=external --outdir=dist/esm --out-extension:.js=.mjs",
     "build:cjs": "esbuild ./src/index --format=cjs --bundle --packages=external --outdir=dist/cjs --out-extension:.js=.cjs",
-    "build:types": "tsc -p tsconfig.json",
+    "build:types": "tsc -p tsconfig.build.json",
     "test": "vitest run --coverage",
     "lint": "pnpm lint:ts && pnpm prettier:check",
-    "lint:ts": "eslint --ignore-path ./.eslintignore --ext .js,.ts ."
+    "lint:ts": "eslint --ext .js,.ts . --ignore-path ../../.eslintignore"
   },
   "dependencies": {
     "@zama-fhe/relayer-sdk": "^0.2.0",

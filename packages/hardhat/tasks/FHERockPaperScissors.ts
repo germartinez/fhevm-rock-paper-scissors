@@ -15,7 +15,7 @@ import type { TaskArguments } from "hardhat/types";
  *
  */
 
-function getStateName(state: BigInt) {
+function getStateName(state: bigint) {
   return state === 0n
     ? "WaitingForPlayers"
     : state === 1n
