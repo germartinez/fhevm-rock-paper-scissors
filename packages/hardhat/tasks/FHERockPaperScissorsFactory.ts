@@ -20,6 +20,8 @@ import type { TaskArguments } from "hardhat/types";
  */
 
 /**
+ * Returns the deployed `FHERockPaperScissorsFactory` address.
+ *
  * Example:
  *   - npx hardhat --network localhost task:factory-address
  *   - npx hardhat --network sepolia task:factory-address
@@ -36,6 +38,8 @@ task("task:factory-address", "Prints the game factory address").setAction(async 
 });
 
 /**
+ * Deploys a new `FHERockPaperScissors` contract from the factory.
+ *
  * Example:
  *   - npx hardhat --network localhost task:create-game [--address 0x...]
  *   - npx hardhat --network sepolia task:create-game [--address 0x...]
@@ -72,6 +76,8 @@ task("task:create-game", "Creates a new game")
   });
 
 /**
+ * Returns a paginated list of the games deployed by the factory contract.
+ *
  * Example:
  *   - npx hardhat --network localhost task:games --page 1 --pagesize 10 [--address 0x...]
  *   - npx hardhat --network sepolia task:games --page 1 --pagesize 10 [--address 0x...]
@@ -108,6 +114,8 @@ task("task:games", "Gets the games created")
   });
 
 /**
+ * Returns the number of games deployed by the factory contract.
+ *
  * Example:
  *   - npx hardhat --network localhost task:game-count [--address 0x...]
  *   - npx hardhat --network sepolia task:game-count [--address 0x...]

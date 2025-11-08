@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "description": "FHEVM Rock Paper Scissors",
+  "description": "FHEVM Rock-Paper-Scissors",
   "version": "0.1.0",
   "private": true,
   "author": "Germán Martínez",
@@ -39,15 +39,13 @@
     "hardhat:chain": "pnpm --filter ./packages/hardhat chain",
     "hardhat:clean": "pnpm --filter ./packages/hardhat clean",
     "hardhat:compile": "pnpm --filter ./packages/hardhat compile",
+    "hardhat:generate": "pnpm --filter ./packages/hardhat typechain",
     "hardhat:deploy": "pnpm --filter ./packages/hardhat deploy:localhost && pnpm hardhat:generate",
     "hardhat:deploy:sepolia": "pnpm --filter ./packages/hardhat deploy:sepolia && pnpm hardhat:generate",
+    "hardhat:verify:sepolia": "pnpm --filter ./packages/hardhat verify:sepolia",
     "hardhat:format": "pnpm --filter ./packages/hardhat prettier:write",
-    "hardhat:generate": "pnpm --filter ./packages/hardhat typechain",
-    "hardhat:hardhat-verify": "pnpm --filter ./packages/hardhat verify",
     "hardhat:lint": "pnpm --filter ./packages/hardhat lint",
-    "hardhat:lint-staged": "pnpm --filter ./packages/hardhat lint",
-    "hardhat:verify": "pnpm --filter ./packages/hardhat verify:localhost",
-    "hardhat:verify:sepolia": "pnpm --filter ./packages/hardhat verify:sepolia"
+    "hardhat:lint-staged": "pnpm --filter ./packages/hardhat lint"
   },
   "devDependencies": {
     "@fhevm/hardhat-plugin": "^0.1.0",
@@ -62,6 +60,7 @@
     "@vitest/coverage-v8": "4.0.8",
     "@zama-fhe/relayer-sdk": "^0.2.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^17.2.3",
     "esbuild": "^0.25.12",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",

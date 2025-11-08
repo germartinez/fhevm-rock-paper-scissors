@@ -1,6 +1,6 @@
 {
   "name": "fhevm-rock-paper-scissors",
-  "description": "FHEVM Rock Paper Scissors SDK",
+  "description": "FHEVM Rock-Paper-Scissors SDK",
   "version": "0.1.0",
   "private": true,
   "types": "dist/src/index.d.ts",

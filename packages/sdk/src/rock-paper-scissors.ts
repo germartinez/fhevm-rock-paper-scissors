@@ -8,7 +8,7 @@ import { FHERockPaperScissorsFactory__factory } from "./types/factories/contract
 import { getGameInfo, validateGameState } from "./utils";
 
 /**
- * SDK for interacting with the FHE Rock-Paper-Scissors contracts
+ * SDK for interacting with the FHEVM Rock-Paper-Scissors contracts
  *
  * This class provides a typed interface for:
  * - Connecting a signer to the factory and existing games
@@ -42,7 +42,9 @@ export class FHEVMRockPaperScissors {
    * Connects the SDK to the blockchain using a provided signer
    *
    * @param signer - An Ethers.js signer configured with a provider
-   * @throws If the signer lacks a network or the chain is unsupported
+   *
+   * @throws If the signer is not connected to a chain
+   * @throws If the chain is unsupported
    *
    * @example
    * ```ts
@@ -66,11 +68,11 @@ export class FHEVMRockPaperScissors {
   }
 
   /**
-   * Returns the wallet address of the connected player.
+   * Returns the address of the connected signer.
    *
-   * @returns The connected wallet address
+   * @returns The address of the connected signer
    *
-   * @throws If no account is connected
+   * @throws If no signer is connected
    *
    * @example
    * ```ts
@@ -79,19 +81,19 @@ export class FHEVMRockPaperScissors {
    */
   async getConnectedPlayerAddress() {
     if (!this.#signer) {
-      throw new Error("Account not connected");
+      throw new Error("Signer not connected");
     }
     return this.#signer.getAddress();
   }
 
   /**
-   * Returns a paginated list of created games from the configured contract factory.
+   * Returns a paginated list of the games deployed by the factory contract.
    *
-   * @param page - Page number (defaults to 1, must be greater than 0)
-   * @param pageSize - Number of games per page (defaults to 10, must be greater than 0 and lower than or equal to 10)
-   * @returns A list of game addresses
+   * @param page - Page number (page > 0). Optional. Defaults to 1
+   * @param pageSize - Number of results per page (0 < pageSize ≤ 10). Optional. Defaults to 10
+   * @returns An array with the addresses of the deployed games
    *
-   * @throws If no account is connected
+   * @throws If the factory contract is not initialized
    *
    * @example
    * ```ts
@@ -100,7 +102,7 @@ export class FHEVMRockPaperScissors {
    */
   async getGames({ page, pageSize }: { page?: number; pageSize?: number }) {
     if (!this.#factoryContract) {
-      throw new Error("Account not connected");
+      throw new Error("Factory contract not initialized");
     }
     const validatedPage = !page || page < 1 ? 1 : page;
     const validatedPageSize = !pageSize || pageSize > 10 ? 10 : pageSize;
@@ -108,14 +110,12 @@ export class FHEVMRockPaperScissors {
   }
 
   /**
-   * Returns the game information for a specific game contract.
+   * Returns the information of a specific game.
    *
    * @param gameAddress - The address of the Rock-Paper-Scissors game contract
-   * @returns The game information including the state, players, gestures, and winner
+   * @returns Structured game information including the state, players, gestures, and winner
    *
-   * @throws If no account is connected
-   * @throws If the game is not in a valid state
-   * @throws If the play transaction fails
+   * @throws If no signer is connected
    *
    * @example
    * ```ts
@@ -124,7 +124,7 @@ export class FHEVMRockPaperScissors {
    */
   async getGameInfo({ gameAddress }: { gameAddress: string }) {
     if (!this.#signer) {
-      throw new Error("Account not connected");
+      throw new Error("Signer not connected");
     }
     const gameContract = FHERockPaperScissors__factory.connect(gameAddress, this.#signer);
     const [state, player1, player2, gesture1, gesture2, winnerAddress] = await gameContract.getGame();
@@ -132,12 +132,12 @@ export class FHEVMRockPaperScissors {
   }
 
   /**
-   * Deploys a new FHE Rock-Paper-Scissors game contract.
+   * Deploys a new `FHERockPaperScissors` contract from the factory.
    *
-   * @returns Transaction object and `wait()` handler for the transaction receipt and the game address
+   * @returns Transaction object and `wait()` handler for the transaction receipt and the deployed game address
    *
-   * @throws If no account is connected
-   * @throws If the game creation transaction fails
+   * @throws If the factory contract is not initialized
+   * @throws If the game deployment transaction fails
    *
    * @example
    * ```ts
@@ -147,7 +147,7 @@ export class FHEVMRockPaperScissors {
    */
   async createGame() {
     if (!this.#factoryContract) {
-      throw new Error("Account not connected");
+      throw new Error("Factory contract not initialized");
     }
     const tx = await this.#factoryContract.deployGame();
 
@@ -168,14 +168,16 @@ export class FHEVMRockPaperScissors {
   }
 
   /**
-   * Plays an encrypted gesture (Rock, Paper, or Scissors) in a given game.
+   * Submits an encrypted gesture for the connected player in a given game.
    *
-   * @param gameAddress - Address of the game contract
+   * @param gameAddress - Address of the target game contract
    * @param gesture - Gesture played (0 = Rock, 1 = Paper, 2 = Scissors)
-   * @returns Transaction object and `wait()` handler for the transaction receipt
+   * @returns Transaction object and `wait()` handler for the transaction receipt and the player address
    *
-   * @throws If no account is connected
-   * @throws If the game is not in a valid state
+   * @throws If no signer is connected
+   * @throws If the factory contract is not initialized
+   * @throws If the FHEVM instance is not initialized
+   * @throws If the game is not in the right state
    * @throws If the play transaction fails
    *
    * @example
@@ -185,9 +187,16 @@ export class FHEVMRockPaperScissors {
    * ```
    */
   async play({ gameAddress, gesture }: { gameAddress: string; gesture: Gesture }) {
-    if (!this.#factoryContract || !this.#signer || !this.#sdk) {
-      throw new Error("Account not connected");
+    if (!this.#signer) {
+      throw new Error("Signer not connected");
     }
+    if (!this.#factoryContract) {
+      throw new Error("Factory contract not initialized");
+    }
+    if (!this.#sdk) {
+      throw new Error("FHEVM instance not initialized");
+    }
+
     const gameContract = FHERockPaperScissors__factory.connect(gameAddress, this.#signer);
     await validateGameState(gameContract, [GameState.WaitingForPlayers, GameState.PlayerOnePlayed]);
 
@@ -213,14 +222,16 @@ export class FHEVMRockPaperScissors {
   }
 
   /**
-   * Requests the computation of the winner of the game.
+   * Requests the computation of the winner for a given completed game.
    *
    * @param gameAddress - Address of the game contract
    * @returns Transaction object and `wait()` handler for the transaction receipt
    *
-   * @throws If no account is connected
-   * @throws If the game is not in a valid state
-   * @throws If the winner computation transaction fails
+   * @throws If the factory contract is not initialized
+   * @throws If the signer is not connected
+   * @throws If the FHEVM instance is not initialized
+   * @throws If the game is not in the right state
+   * @throws If the winner computation request transaction fails
    *
    * @example
    * ```ts
@@ -229,8 +240,14 @@ export class FHEVMRockPaperScissors {
    * ```
    */
   async computeWinner(gameAddress: string) {
-    if (!this.#factoryContract || !this.#signer || !this.#sdk) {
-      throw new Error("Account not connected");
+    if (!this.#signer) {
+      throw new Error("Signer not connected");
+    }
+    if (!this.#factoryContract) {
+      throw new Error("Factory contract not initialized");
+    }
+    if (!this.#sdk) {
+      throw new Error("FHEVM instance not initialized");
     }
     const gameContract = FHERockPaperScissors__factory.connect(gameAddress, this.#signer);
     await validateGameState(gameContract, [GameState.PlayerTwoPlayed]);

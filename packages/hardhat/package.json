@@ -1,6 +1,6 @@
 {
   "name": "fhevm-rock-paper-scissors-hardhat",
-  "description": "FHEVM Rock Paper Scissors Hardhat",
+  "description": "FHEVM Rock-Paper-Scissors Hardhat",
   "version": "0.1.0",
   "private": true,
   "license": "BSD-3-Clause-Clear",
@@ -15,17 +15,17 @@
   "scripts": {
     "clean": "rimraf ./fhevmTemp ./artifacts ./cache ./types ./dist",
     "compile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat compile",
-    "lint": "pnpm lint:sol && pnpm lint:ts && pnpm prettier:check",
-    "lint:sol": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
-    "lint:ts": "eslint --ext .js,.ts . --ignore-path ../../.eslintignore",
     "postcompile": "pnpm typechain",
-    "prettier:check": "prettier --check \"**/*.{js,json,md,sol,ts,yml}\" --ignore-path ../../.prettierignore",
-    "prettier:write": "prettier --write \"**/*.{js,json,md,sol,ts,yml}\" --ignore-path ../../.prettierignore",
     "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain && rm -rf ./sdk/src/types && cp -r ./types ../sdk/src",
     "chain": "hardhat node --network hardhat --no-deploy",
     "deploy:localhost": "hardhat deploy --network localhost",
     "deploy:sepolia": "hardhat deploy --network sepolia",
-    "verify:sepolia": "hardhat verify --network sepolia"
+    "verify:sepolia": "hardhat verify --network sepolia",
+    "prettier:check": "prettier --check \"**/*.{js,json,md,sol,ts,yml}\" --ignore-path ../../.prettierignore",
+    "prettier:write": "prettier --write \"**/*.{js,json,md,sol,ts,yml}\" --ignore-path ../../.prettierignore",
+    "lint": "pnpm lint:sol && pnpm lint:ts && pnpm prettier:check",
+    "lint:sol": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
+    "lint:ts": "eslint --ext .js,.ts . --ignore-path ../../.eslintignore"
   },
   "dependencies": {
     "encrypted-types": "^0.0.4",

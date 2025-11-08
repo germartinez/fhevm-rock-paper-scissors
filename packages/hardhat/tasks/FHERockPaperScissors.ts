@@ -28,6 +28,8 @@ function getStateName(state: bigint) {
 }
 
 /**
+ * Returns the information of a specific game.
+ *
  * Example:
  *   - npx hardhat --network localhost task:game-info --address 0x...
  *   - npx hardhat --network sepolia task:game-info --address 0x...
@@ -57,6 +59,8 @@ task("task:game-info", "Gets the info of a game")
   });
 
 /**
+ * Submits an encrypted gesture for the connected player in a given game.
+ *
  * Example:
  *   - npx hardhat --network localhost task:play --address 0x... --gesture 0 --signerindex 0
  *   - npx hardhat --network sepolia task:play --address 0x... --gesture 0 --signerindex 0
@@ -111,6 +115,8 @@ task("task:play", "Plays in a game")
   });
 
 /**
+ * Requests the computation of the winner for a given completed game.
+ *
  * Example:
  *   - npx hardhat --network sepolia task:compute-winner --address 0x...
  */

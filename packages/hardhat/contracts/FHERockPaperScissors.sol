@@ -80,7 +80,7 @@ contract FHERockPaperScissors is SepoliaConfig {
     /// @notice Error thrown when the request ID is invalid
     error InvalidRequestId();
 
-    /// @notice Initializes a new Rock Paper Scissors game in the waiting state
+    /// @notice Initializes a new Rock-Paper-Scissors game in the waiting state
     constructor() {
         state = State.WaitingForPlayers;
         emit WaitingForPlayers();
