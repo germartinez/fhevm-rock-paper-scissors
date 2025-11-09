@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
 import { ethers, HDNodeWallet } from "ethers";
 import { beforeAll, describe, expect, it } from "vitest";
 import { FHEVMRockPaperScissors } from "../src";
 import { Gesture } from "../src/types";
 
-const MNEMONIC = "";
+dotenv.config();
+
+const MNEMONIC = process.env.MNEMONIC ?? "";
 const RPC_URL = "https://ethereum-sepolia-rpc.publicnode.com";
 
 function sleep(ms: number) {
