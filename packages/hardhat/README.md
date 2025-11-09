@@ -1,105 +1,67 @@
-# FHEVM Rock-Paper-Scissors
+# FHEVM Rock-Paper-Scissors Hardhat ✊✋✌️
 
-A Hardhat-based Rock-Paper-Scissors game with Fully Homomorphic Encryption (FHE) enabled Solidity smart contracts using
-the FHEVM protocol by Zama.
+This package contains the smart contract development and deployment setup for the FHEVM Rock-Paper-Scissors project
+using Hardhat. It handles installation, compilation, generation of artifacts and types, and deployments.
 
-## Quick Start
-
-For detailed instructions see:
-[FHEVM Hardhat Quick Start Tutorial](https://docs.zama.ai/protocol/solidity-guides/getting-started/quick-start-tutorial)
-
-### Prerequisites
+## Prerequisites
 
 - **Node.js**: Version 20 or higher
 - **npm or yarn/pnpm**: Package manager
 
-### Installation
+## Installation
 
-1. **Install dependencies**
+Install the package dependencies.
 
-   ```bash
-   npm install
-   ```
-
-2. **Set up environment variables**
-
-   ```bash
-   npx hardhat vars set MNEMONIC
-
-   # Set your Infura API key for network access
-   npx hardhat vars set INFURA_API_KEY
-
-   # Optional: Set Etherscan API key for contract verification
-   npx hardhat vars set ETHERSCAN_API_KEY
-   ```
-
-3. **Compile and test**
-
-   ```bash
-   npm run compile
-   npm run test
-   ```
-
-4. **Deploy to local network**
-
-   ```bash
-   # Start a local FHEVM-ready node
-   npx hardhat node
-   # Deploy to local network
-   npx hardhat deploy --network localhost
-   ```
-
-5. **Deploy to Sepolia Testnet**
-
-   ```bash
-   # Deploy to Sepolia
-   npx hardhat deploy --network sepolia
-   # Verify contract on Etherscan
-   npx hardhat verify --network sepolia <CONTRACT_ADDRESS>
-   ```
-
-6. **Test on Sepolia Testnet**
-
-   ```bash
-   # Once deployed, you can run a simple test on Sepolia.
-   npx hardhat test --network sepolia
-   ```
-
-## 📁 Project Structure
-
-```
-fhevm-hardhat-template/
-├── contracts/                            # Smart contract source files
-│   │── FHERockPaperScissorsFactory.sol   # FHE Rock-paper-scissors factory contract
-│   └── FHERockPaperScissors.sol          # FHE Rock-paper-scissors contract
-├── deploy/                               # Deployment scripts
-├── tasks/                                # Hardhat custom tasks
-├── test/                                 # Test files
-├── hardhat.config.ts                     # Hardhat configuration
-└── package.json                          # Dependencies and scripts
+```bash
+pnpm install
 ```
 
-## 📜 Available Scripts
+## Configuration
 
-| Script             | Description              |
-| ------------------ | ------------------------ |
-| `npm run compile`  | Compile all contracts    |
-| `npm run test`     | Run all tests            |
-| `npm run coverage` | Generate coverage report |
-| `npm run lint`     | Run linting checks       |
-| `npm run clean`    | Clean build artifacts    |
+Set the required variables using Hardhat's built-in variable system.
 
-## 📚 Documentation
+```
+npx hardhat vars set MNEMONIC
+npx hardhat vars set INFURA_API_KEY
+```
 
-- [FHEVM Documentation](https://docs.zama.ai/fhevm)
-- [FHEVM Hardhat Setup Guide](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup)
-- [FHEVM Testing Guide](https://docs.zama.ai/protocol/solidity-guides/development-guide/hardhat/write_test)
-- [FHEVM Hardhat Plugin](https://docs.zama.ai/protocol/solidity-guides/development-guide/hardhat)
+## Compilation
 
-## 📄 License
+Compile the smart contracts.
 
-This project is licensed under the BSD-3-Clause-Clear License. See the [LICENSE](LICENSE) file for details.
+```bash
+pnpm compile
+```
 
----
+TypeChain types are generated automatically after compilation and are available at `types/`.
 
-**Built with ❤️ by Germán, based on work by the Zama team**
+## Deployment
+
+Deploy the factory contract that will manage Rock-Paper-Scissors games.
+
+### Local network
+
+Start a local node in one terminal.
+
+```bash
+pnpm chain
+```
+
+Deploy the factory contract in another terminal.
+
+```bash
+pnpm deploy:localhost
+```
+
+### Sepolia testnet
+
+Deploy to Sepolia.
+
+```bash
+pnpm deploy:sepolia
+```
+
+## Documentation
+
+- [Hardhat - Quick Start](../../docs/hardhat-quick-start.md)
+- [Hardhat - Technical Reference](../../docs/hardhat-technical-reference.md)
