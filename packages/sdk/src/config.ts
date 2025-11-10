@@ -13,6 +13,6 @@ export const NETWORK_CONFIG: NetworkConfig = {
       ...SepoliaConfig,
       network: "https://ethereum-sepolia-rpc.publicnode.com",
     },
-    fheRockPaperScissorsFactoryAddress: "",
+    fheRockPaperScissorsFactoryAddress: "0x87B44cB816dbfd73645c8CE6F2d0807cCBc77E91",
   },
 };
