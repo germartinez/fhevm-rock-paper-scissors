@@ -28,6 +28,7 @@
   },
   "scripts": {
     "format": "pnpm sdk:format && pnpm hardhat:format",
+    "format:check": "pnpm sdk:format:check && pnpm hardhat:format:check",
     "clean": "pnpm sdk:clean && pnpm hardhat:clean",
     "lint": "pnpm sdk:lint && pnpm hardhat:lint",
     "precommit": "lint-staged",
@@ -35,6 +36,7 @@
     "sdk:build": "pnpm --filter ./packages/sdk build",
     "sdk:test": "pnpm --filter ./packages/sdk test",
     "sdk:format": "pnpm --filter ./packages/sdk prettier:write",
+    "sdk:format:check": "pnpm --filter ./packages/sdk prettier:check",
     "sdk:lint": "pnpm --filter ./packages/sdk lint",
     "hardhat:chain": "pnpm --filter ./packages/hardhat chain",
     "hardhat:clean": "pnpm --filter ./packages/hardhat clean",
@@ -44,6 +46,7 @@
     "hardhat:deploy:sepolia": "pnpm --filter ./packages/hardhat deploy:sepolia && pnpm hardhat:generate",
     "hardhat:verify:sepolia": "pnpm --filter ./packages/hardhat verify:sepolia",
     "hardhat:format": "pnpm --filter ./packages/hardhat prettier:write",
+    "hardhat:format:check": "pnpm --filter ./packages/hardhat prettier:check",
     "hardhat:lint": "pnpm --filter ./packages/hardhat lint",
     "hardhat:lint-staged": "pnpm --filter ./packages/hardhat lint"
   },
